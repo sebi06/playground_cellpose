@@ -1,0 +1,86 @@
+# Tested on Windows only but should also work for Linux.
+#
+# Disclaimer: Use at your own risk!
+#
+
+name: cellpose_gpu
+channels:
+  - pytorch
+  - nvidia
+  #- defaults
+  #conda- conda-forge
+dependencies:
+  - python=3.9
+  - conda
+  - docutils
+  - pip
+  - wheel
+  - setuptools
+  - autopep8
+  - nb_conda_kernels
+  - pytest
+  - pytorch
+  #- pytorch-cuda=11.7
+  - cudatoolkit=11.6
+  #- cudnn
+  #- pyopencl
+  #- pycudadecon
+  #- cupy
+  - pooch
+  - requests
+  - tqdm
+
+  - pip:
+      - czmodel[pytorch]>=5
+      #- torch
+      #- torchvision
+      - opencv-python
+      - onnxruntime
+      - magicgui
+      - magic-class
+      - apeer-dev-kit
+      - apeer-ometiff-library
+      - aicsimageio[all]
+      - aicspylibczi
+      - pylibCZIrw
+      - cztile
+      - czitools
+      - matplotlib
+      - mightymosaic
+      - ome-zarr
+      - cellpose[gui]
+      - napari[all]
+      - napari-czann-segment
+      - napari-aicsimageio
+      - napari-brightness-contrast
+      - napari-layer-details-display
+      - napari-skimage-regionprops
+      - napari-simpleitk-image-processing
+      - napari-plugin-search
+      - napari-ome-zarr
+      #- pyclesperanto-prototype
+      #- napari-pyclesperanto-assistant
+      #- napari-accelerated-pixel-and-object-classification
+      #- napari-lattice
+      #- napari-nD-annotator
+      #- napari-label-interpolator
+      - napari-crop
+      - napari-plugin-search
+      #- cellpose-napari
+
+      
+
+
+# Create an environment
+# mamba env create --file env_ia_cellpose_gpu_39.yml
+
+# Update an environment
+# mamba env update --name cellpose_gpu --file env_ia_cellpose_gpu_39.yml --prune
+
+# Remove an environment
+# mamba remove --name cellpose_gpu --all
+# mamba clean --all
+
+# Show the locations of all versions of Python that are currently in the path
+# Windows: where python
+# Linux which -a python
