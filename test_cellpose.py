@@ -2,12 +2,11 @@
 
 #################################################################
 # File        : test_cellpose.py
-# Version     : 0.6
 # Author      : czsrh
-# Date        : 20.10.2020
-# Institution : Carl Zeiss Microscopy GmbH
 #
-# Copyright (c) 2020 Carl Zeiss AG, Germany. All Rights Reserved.
+# Disclaimer: This code is purely experimental. Feel free to
+# use it at your own risk.
+#
 #################################################################
 
 import matplotlib.pyplot as plt
