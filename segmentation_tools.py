@@ -40,10 +40,10 @@ from scipy import ndimage
 from MightyMosaic import MightyMosaic
 from typing import List, Dict, NamedTuple, Tuple, Optional, Type, Any, Union
 
-#try:
+# try:
 #    print('Trying to find mxnet library ...')
 #    import mxnet
-#except (ImportError, ModuleNotFoundError) as error:
+# except (ImportError, ModuleNotFoundError) as error:
 #    # Output expected ImportErrors.
 #    print(error.__class__.__name__ + ": " + error.msg)
 #    print('mxnet will not be used.')
@@ -660,7 +660,8 @@ def add_padding(image2d, input_height=1024, input_width=1024):
     padding_left, padding_right = padding_width // 2, padding_width - padding_width // 2
     padding_top, padding_bottom = padding_height // 2, padding_height - padding_height // 2
 
-    image2d_padded = np.pad(image2d, ((padding_top, padding_bottom), (padding_left, padding_right), (0, 0)), 'reflect')
+    image2d_padded = np.pad(image2d, ((padding_top, padding_bottom),
+                            (padding_left, padding_right), (0, 0)), 'reflect')
 
     if not isrgb:
         image2d_padded = np.squeeze(image2d_padded, axis=2)
