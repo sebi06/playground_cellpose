@@ -11,25 +11,11 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-#from skimage import io, measure, segmentation
-#from skimage import exposure
-#from skimage.exposure import rescale_intensity
-#from skimage.morphology import white_tophat, black_tophat, disk, square, ball, closing, square, dilation
-#from skimage.morphology import remove_small_objects, remove_small_holes
-#from skimage.feature import peak_local_max
-#from skimage.measure import label, regionprops
-#from skimage.filters import threshold_otsu, threshold_triangle, rank, median, gaussian
-#from skimage.segmentation import clear_border, watershed, random_walker
 from skimage.color import label2rgb
-#from skimage.util import invert
-#from skimage.transform import rescale, resize
-#import scipy.ndimage as ndimage
 import os
 from typing import List, Dict, Tuple, Optional, Type, Any, Union
-#from tifffile import imwrite, tiffcomment
 from dataclasses import dataclass, field
 from cztile.fixed_total_area_strategy import AlmostEqualBorderFixedTotalAreaStrategy2D
-#import segmentation_tools as sgt
 import pandas as pd
 from skimage import measure, segmentation
 from skimage.measure import regionprops
@@ -37,8 +23,7 @@ from pylibCZIrw import czi as pyczi
 from czitools import pylibczirw_metadata as czimd
 from czitools import misc
 from tqdm.contrib.itertools import product
-from cellpose import plot, transforms
-from cellpose import models, utils
+from cellpose import models
 
 
 def segment_nuclei_cellpose2d(image2d, cp_model,
@@ -101,15 +86,15 @@ def segment_nuclei_cellpose2d(image2d, cp_model,
     return masks[0]
 
 
-def segment_objects_cellpose2d(image2d, cp_model,
-                               channels=[0, 0],
-                               rescale=None,
-                               diameter=None,
-                               min_size=15,
-                               tile=False,
-                               tile_overlap=0.1,
-                               verbose=False,
-                               cellprob_threshold=0.0):
+def segment_objects_cellpose2d(image2d: np.ndarray,
+                               cp_model: models.CellposeModel,
+                               channels: List[int] = [0, 0],
+                               rescale: bool = None,
+                               diameter: int = 17,
+                               min_size: int = 15,
+                               tile: bool = False,
+                               tile_overlap: float = 0.1,
+                               cellprob_threshold: float = 0.0):
 
     # get the mask for a single image
     masks, _, _ = cp_model.eval([image2d],
@@ -148,18 +133,13 @@ def load_cellpose_model(model_type='nuclei',
     return model
 
 
-def load_cellpose_modelpath(model_path: str = r"f:\\Github\\playground_cellpose\\.cellpose",
-                            gpu: bool = True):
+def load_cellpose_modelpath(model_path: List[str],
+                            gpu: bool = True) -> models.CellposeModel:
 
     # load cellpose model for cell nuclei using GPU or CPU
     print('Loading Cellpose Model from path...')
 
-    models_list = [r"F:\Github\playground_cellpose\.cellpose\nucleitorch_0",
-                   r"F:\Github\playground_cellpose\.cellpose\nucleitorch_1",
-                   r"F:\Github\playground_cellpose\.cellpose\nucleitorch_2",
-                   r"F:\Github\playground_cellpose\.cellpose\nucleitorch_3"]
-
-    model = models.CellposeModel(gpu=gpu, pretrained_model=models_list)
+    model = models.CellposeModel(gpu=gpu, pretrained_model=model_path)
 
     return model
 
@@ -228,6 +208,16 @@ verbose = True
 model_type = "nuclei"
 #model_type = "cyto"
 
+models_nuclei = [r"F:\Github\playground_cellpose\.cellpose\nucleitorch_0",
+                 r"F:\Github\playground_cellpose\.cellpose\nucleitorch_1",
+                 r"F:\Github\playground_cellpose\.cellpose\nucleitorch_2",
+                 r"F:\Github\playground_cellpose\.cellpose\nucleitorch_3"]
+
+models_cyto = [r"F:\Github\playground_cellpose\.cellpose\cytotorch_0",
+               r"F:\Github\playground_cellpose\.cellpose\cytotorch_1",
+               r"F:\Github\playground_cellpose\.cellpose\cytotorch_2",
+               r"F:\Github\playground_cellpose\.cellpose\cytotorch_3"]
+
 # define columns names for dataframe
 cols = ['S', 'T', 'Z', 'C', 'Number']
 objects = pd.DataFrame(columns=cols)
@@ -245,7 +235,7 @@ to_measure = ('label',
 # load the cellpose model
 #cp_model = load_cellpose_model(model_type=model_type, gpu=True, net_avg=True)
 
-cp_model = load_cellpose_modelpath(gpu=True)
+cp_model = load_cellpose_modelpath(models_nuclei, gpu=True)
 
 
 with pyczi.create_czi(savepath, exist_ok=True) as czidoc_w:
@@ -281,8 +271,7 @@ with pyczi.create_czi(savepath, exist_ok=True) as czidoc_w:
                                                 min_size=minsize_nuc,
                                                 tile=tile,
                                                 tile_overlap=tile_overlap,
-                                                cellprob_threshold=cellprob_threshold,
-                                                verbose=True)
+                                                cellprob_threshold=cellprob_threshold)
 
             # # get the mask for the current image
             # labels = segment_nuclei_cellpose2d(img2d, cp_model,

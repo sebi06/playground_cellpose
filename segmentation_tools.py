@@ -393,6 +393,37 @@ def segment_nuclei_cellpose2d(image2d, model,
     return masks[0]
 
 
+def segment_objects_cellpose2d(image2d: np.ndarray,
+                               cp_model: models.CellposeModel,
+                               channels: List[int] = [0, 0],
+                               rescale: bool = None,
+                               diameter: int = 17,
+                               min_size: int = 15,
+                               tile: bool = False,
+                               tile_overlap: float = 0.1,
+                               cellprob_threshold: float = 0.0):
+
+    # get the mask for a single image
+    masks, _, _ = cp_model.eval([image2d],
+                                batch_size=8,
+                                channels=channels,
+                                diameter=diameter,
+                                min_size=min_size,
+                                normalize=True,
+                                invert=False,
+                                rescale=rescale,
+                                do_3D=False,
+                                net_avg=True,
+                                tile=tile,
+                                tile_overlap=tile_overlap,
+                                augment=False,
+                                flow_threshold=0.4,
+                                cellprob_threshold=cellprob_threshold,
+                                progress=None)
+
+    return masks[0]
+
+
 def segment_nuclei_stardist(image2d, sdmodel,
                             prob_thresh=0.5,
                             overlap_thresh=0.3,
@@ -474,30 +505,22 @@ def load_cellpose_model(model_type='nuclei',
     # load cellpose model for cell nuclei using GPU or CPU
     print('Loading Cellpose Model ...')
 
-    """
-    # try to get the device
-    try:
-        device = set_device()
-    except NameError as error:
-        print(error.__class__.__name__ + ": " + error.msg)
-        device = None
-
-    if device is None:
-        model = models.Cellpose(gpu=False,
-                                model_type='nuclei',
-                                net_avg=net_avg,
-                                )
-
-    if device is not None:
-        model = models.Cellpose(model_type=model_type,
-                                net_avg=net_avg,
-                                device=device
-                                )
-    """
-
     model = models.Cellpose(gpu=gpu,
                             model_type=model_type,
-                            net_avg=net_avg)
+                            net_avg=net_avg,
+                            # torch=True
+                            )
+
+    return model
+
+
+def load_cellpose_modelpath(model_path: List[str],
+                            gpu: bool = True) -> models.CellposeModel:
+
+    # load cellpose model for cell nuclei using GPU or CPU
+    print('Loading Cellpose Model from path...')
+
+    model = models.CellposeModel(gpu=gpu, pretrained_model=model_path)
 
     return model
 
