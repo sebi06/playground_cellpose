@@ -517,8 +517,8 @@ def load_cellpose_model(model_type='nuclei',
 def load_cellpose_modelpath(model_path: List[str],
                             gpu: bool = True) -> models.CellposeModel:
 
-    # load cellpose model for cell nuclei using GPU or CPU
-    print('Loading Cellpose Model from path...')
+    # load cellpose models
+    print('Loading Cellpose Models from folder')
 
     model = models.CellposeModel(gpu=gpu, pretrained_model=model_path)
 
