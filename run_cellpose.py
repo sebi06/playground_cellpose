@@ -208,15 +208,15 @@ verbose = True
 model_type = "nuclei"
 #model_type = "cyto"
 
-models_nuclei = [r"F:\Github\playground_cellpose\.cellpose\nucleitorch_0",
-                 r"F:\Github\playground_cellpose\.cellpose\nucleitorch_1",
-                 r"F:\Github\playground_cellpose\.cellpose\nucleitorch_2",
-                 r"F:\Github\playground_cellpose\.cellpose\nucleitorch_3"]
+models_nuclei = [os.path.join(os.getcwd(), os.path.join(".cellpose", "nucleitorch_0")),
+                 os.path.join(os.getcwd(), os.path.join(".cellpose", "nucleitorch_1")),
+                 os.path.join(os.getcwd(), os.path.join(".cellpose", "nucleitorch_2")),
+                 os.path.join(os.getcwd(), os.path.join(".cellpose", "nucleitorch_3"))]
 
-models_cyto = [r"F:\Github\playground_cellpose\.cellpose\cytotorch_0",
-               r"F:\Github\playground_cellpose\.cellpose\cytotorch_1",
-               r"F:\Github\playground_cellpose\.cellpose\cytotorch_2",
-               r"F:\Github\playground_cellpose\.cellpose\cytotorch_3"]
+models_cyto = [os.path.join(os.getcwd(), os.path.join(".cellpose", "cytotorch_0")),
+               os.path.join(os.getcwd(), os.path.join(".cellpose", "cytotorch_1")),
+               os.path.join(os.getcwd(), os.path.join(".cellpose", "cytotorch_2")),
+               os.path.join(os.getcwd(), os.path.join(".cellpose", "cytotorch_3"))]
 
 # define columns names for dataframe
 cols = ['S', 'T', 'Z', 'C', 'Number']
